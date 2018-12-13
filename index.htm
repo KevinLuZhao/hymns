@@ -1,0 +1,36 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <link rel="stylesheet" href="/resources/demos/style.css">
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script>
+            $( document ).ready(function() {
+                $.getJSON("http://localhost:3002/api/categories", {
+                    tags: "mount rainier",
+                    tagmode: "any",
+                    format: "json"
+                }).done((data)=>{
+                    //alert(JSON.stringify(data));
+                    $.each(data, function(key, value) {
+                        $("#ddlCategories").append("<option id="+value.id+">" + value.name + "</option>");
+                    });
+                });
+            });
+            
+            $( window ).on( "load", function() {
+                console.log( "window loaded" );
+            });
+        </script>
+    </head>
+    <body>
+        <div id="divSearch">
+            <form action="http://127.0.0.1:8081/process_get" method="GET">
+                <label for="categories"></label>&nbsp;Category: <select type="text" name="ddlCategory" id="ddlCategories">  &nbsp;  &nbsp;                
+                <label for="title">Song: </label>&nbsp;<input type="text" name="txtName" id="txtName">
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+        
+    </body>
+</html>
