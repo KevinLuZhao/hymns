@@ -4,7 +4,7 @@ const app = new express();
 const router = express.Router();
 
 const categories = require('./modules/categories.js');
-
+const songs=require('./modules/songs.js');
 
 app.get('/', (req, res)=>{
     res.sendFile(__dirname + '/' + 'index.htm');
@@ -15,10 +15,14 @@ app.get('/', (req, res)=>{
 //});
 
 router.route('/categories')
-.get(function(req, res){
-    console.log(categories.Categories);
-    res.send(categories.Categories);
-})
+    .get(function(req, res){
+        res.send(categories.Categories);
+    });
+
+router.route('/songs')
+    .get(function(req,res){
+        console.log(songs.GetSongList('aa'));
+    });
 
 app.use('/api', router);
 
