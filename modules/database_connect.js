@@ -1,11 +1,11 @@
 const mySql = require('mysql');
-const con = mySql.createConnection({
+
+exports.connection_settings = {
     host: "localhost",
     user: "zlu",
     password: "Jacob2007",
     database: "hymns"
-});
+};
 
-
-//const exports = module.exports;
+const con = mySql.createConnection(exports.connection_settings);
 exports.connection = con;

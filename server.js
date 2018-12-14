@@ -1,10 +1,18 @@
 const express = require('express');
 const app = new express();
-
 const router = express.Router();
+const bodyParser = require("body-parser")
 
 const categories = require('./modules/categories.js');
 const songs=require('./modules/songs.js');
+
+app.use(express.static(__dirname + '/public'));
+
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+
+app.use(bodyParser.json());
 
 app.get('/', (req, res)=>{
     res.sendFile(__dirname + '/' + 'index.htm');
@@ -12,16 +20,22 @@ app.get('/', (req, res)=>{
 
 router.route('/categories')
     .get(function(req, res){
-        //console.log("From categories service:", categories.Categories);
         res.send(categories.Categories);
     });
 
 router.route('/songs')
     .post(function(req,res){
-        console.log(req);
-        songs.GetSongList('aa')
+        songs.GetSongList(req.body.id, req.body.term)
             .then(result=>{
-                console.log('The route got result:', result);
+                res.send(result);
+            });
+    });
+
+router.route('/song')
+    .post(function(req,res){
+        console.log("received fom ajax post: ", req.body);
+        songs.GetSongByName(req.body.name)
+            .then(result=>{
                 res.send(result);
             });
     });

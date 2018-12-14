@@ -1,59 +1,93 @@
 <html>
     <head>
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <link rel="stylesheet" href="default.css">
         <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     </head>
     <body>
         <div id="divSearch">
-            <form action="http://127.0.0.1:8081/process_get" method="GET">
+            <!--<form action="#" method="GET">-->
                 <label for="categories" >Category:</label>&nbsp; 
                 <select type="text" name="ddlCategory" id="ddlCategories"></select>  &nbsp;  &nbsp;                
                 <label for="title"></label>Song: </label>&nbsp; 
                 <input type="text" name="txtName" id="txtName">
                 <input type="submit" value="Submit">
-            </form>
+            <!--</form>-->
         </div>
-        
+        <div id="divMain">
+            <div id="divTitle"></div>
+            <div id="divContent"></div>
+        </div>
     </body>
     <script>
-        $( document ).ready(function() {
+        $(document ).ready(function() {
             $.getJSON("http://localhost:3002/api/categories", {
                 tags: "mount rainier",
                 tagmode: "any",
                 format: "json"
             }).done((data)=>{
-                //alert(JSON.stringify(data));
+                $("#ddlCategories").append("<option value=0 selected>Please Select</option>");
                 $.each(data, function(key, value) {
-                    $("#ddlCategories").append("<option id="+value.id+">" + value.name + "</option>");
+                    $("#ddlCategories").append("<option value="+value.id+">" + value.name + "</option>");
                 });
+            });
+
+            $(document).keydown(function(e) {
+                if(e.altKey && e.keyCode == 72)
+                    $("#divSearch").hide("slow");
+            });
+
+            $(document).keydown(function(e) {
+                if(e.altKey && e.keyCode == 83)
+                    $("#divSearch").show("slow");
+            });
+
+            $("#ddlCategories").change(()=>{
+                let id = $("#ddlCategories").val();
+                $("#ddlCategories option[value="+id+"]").attr('selected', 'selected');
+            });
+
+            $( "#txtName").keypress((e)=>{
+                if (e.which == 13){
+                    $.ajax({
+                        url: "http://localhost:3002/api/song",
+                        type: 'post',
+                        dataType: 'JSON',
+                        data:{
+                            name: $('#txtName').val()
+                        },
+                        success: function( data ) {
+                            console.log("This is data from ajax",data);
+                            $("#divTitle").html(data.name);
+                            $("#divContent").html(data.content);
+                            $('#txtName').val("");
+                            $("#divSearch").hide("slow");
+                        }
+                    });
+                }
             });
         });
         $( function() {
-            $( "#txtName" ).autocomplete({
+            $( "#txtName").autocomplete({
                 minLength: 2,
                 source: function( request, response ) {
-                    // Fetch data
                     $.ajax({
-                            url: "http://localhost:3002/api/songs",
-                            type: 'post',
-                            dataType: 'JSON',
-                            data:{
-                                id: $('#ddlCategory').children("option:selected").val(),
-                                term: $('#txtName').text()
-                            },
-                            success: function( data ) {
-                                console.log(data);
-                                response( data );
+                        url: "http://localhost:3002/api/songs",
+                        type: 'post',
+                        dataType: 'JSON',
+                        data:{
+                            id: $('#ddlCategories option:selected').val(),
+                            term: $('#txtName').val()
+                        },
+                        success: function( data ) {
+                            response( data );
                         }
                     });
                 },
                 select: function (event, ui) {
-                    console.log(ui);
-                    // Set selection
-                    $('#txtName').val(ui.item.label); // display the selected text
-                    //$('#selectuser_id').val(ui.item.value); // save selected id to input
+                    $('#txtName').val(ui.item.label); 
                     return false;
                 }
             });

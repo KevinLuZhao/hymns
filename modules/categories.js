@@ -1,6 +1,4 @@
-//const mySql = require('mysql');
 const db = require('./database_connect');
-//const exports = module.exports;
 
 var con = db.connection;
 con.connect((err)=>{
