@@ -6,8 +6,6 @@ const con = mySql.createConnection({
     database: "hymns"
 });
 
-con.connect((err)=>{
-    if (err) console.log(err);
-})
+
 //const exports = module.exports;
 exports.connection = con;
