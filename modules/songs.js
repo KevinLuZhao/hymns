@@ -24,7 +24,7 @@ const SearchSongs = function(id, term){
                 });
                 resolve(arr);
             }
-            //con.end();
+            con.end();
         });
     });
 }
@@ -43,7 +43,7 @@ const GetSongByName = function(name){
             else if(rows){
                 resolve(rows[0]);
             }
-            //con.end();
+            con.end();
         });
     });
 }

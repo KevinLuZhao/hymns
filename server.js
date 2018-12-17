@@ -33,7 +33,6 @@ router.route('/songs')
 
 router.route('/song')
     .post(function(req,res){
-        console.log("received fom ajax post: ", req.body);
         songs.GetSongByName(req.body.name)
             .then(result=>{
                 res.send(result);
