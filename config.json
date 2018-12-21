@@ -1,0 +1,10 @@
+{
+    "app_name": "Friday Meeting Sons",
+    "app_desc": "my app desc",
+    "node_port": 3002,
+    "json_indentation": 4,
+    "host": "localhost",
+    "user": "zlu",
+    "password": "Jacob2007",
+    "database": "hymns"
+}
