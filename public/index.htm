@@ -16,8 +16,7 @@
                 <label for="categories" >Category:</label>&nbsp; 
                 <select type="text" name="ddlCategory" id="ddlCategories"></select>  &nbsp;  &nbsp;                
                 <label for="title"></label>Song: </label>&nbsp; 
-                <input type="text" name="txtName" id="txtName">
-                <input type="submit" value="Submit">
+                <input type="text" name="txtName" id="txtName" size="80px">
             <!--</form>-->
         </div>
         <div id="divMain">
@@ -32,17 +31,21 @@
                 tagmode: "any",
                 format: "json"
             }).done((data)=>{
-                $("#ddlCategories").append("<option value=0 selected>Please Select</option>");
+                $("#ddlCategories").append("<option value=0 selected>All Songs</option>");
                 $.each(data, function(key, value) {
                     $("#ddlCategories").append("<option value="+value.id+">" + value.name + "</option>");
                 });
             });
 
+            $("#ddlCategories").focus();
+
+            //ALT + h
             $(document).keydown(function(e) {
                 if(e.altKey && e.keyCode == 72)
                     $("#divSearch").hide("slow");
             });
 
+            //ALT + s
             $(document).keydown(function(e) {
                 if(e.altKey && e.keyCode == 83)
                     $("#divSearch").show("slow");
@@ -66,6 +69,7 @@
                             console.log("This is data from ajax",data);
                             $("#divTitle").html(data.name);
                             $("#divContent").html(data.content);
+                            $("#ddlCategories").focus();
                             $('#txtName').val("");
                             $("#divSearch").hide("slow");
                         }

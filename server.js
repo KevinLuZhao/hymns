@@ -38,14 +38,14 @@ class Server{
             .get(function(req, res){
                 res.send(categories.Categories);
             });
-        
+
         router.route('/songs')
             .post(function(req,res){
                 songs.GetSongList(req.body.id, req.body.term)
                     .then(result=>{
                         res.send(result);
                     });
-            });
+    });
         
         router.route('/song')
             .post(function(req,res){
