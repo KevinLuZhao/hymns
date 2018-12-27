@@ -1,11 +1,10 @@
 const express = require('express');
 const app = new express();
-const router = express.Router();
 const bodyParser = require("body-parser")
-const categories = require('./modules/categories.js');
 const errorhandler = require('errorhandler');
-const songs=require('./modules/songs.js');
-const config = require('./modules/app_configs').Config;
+const config = require('./api/app_configs').Config;
+
+const routerManager = require('./router.js');
 
 class Server{
     constructor() {
@@ -30,32 +29,7 @@ class Server{
     }
 
     initRouters() {
-        app.get('/', (req, res)=>{
-            res.sendFile(__dirname + '/public/index.htm');
-        })
-        
-        router.route('/categories')
-            .get(function(req, res){
-                res.send(categories.Categories);
-            });
-
-        router.route('/songs')
-            .post(function(req,res){
-                songs.GetSongList(req.body.id, req.body.term)
-                    .then(result=>{
-                        res.send(result);
-                    });
-    });
-        
-        router.route('/song')
-            .post(function(req,res){
-                console.log("received fom ajax post: ", req.body);
-                songs.GetSongByName(req.body.name)
-                    .then(result=>{
-                        res.send(result);
-                    });
-            });
-        
+        const router = routerManager.load(app);    
         app.use('/api', router);
     }
 }

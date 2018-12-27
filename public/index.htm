@@ -8,7 +8,10 @@
         <link rel="stylesheet" href="default.css">
         <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
+        <script src="scripts/load_song.js"></script>
+        <script src="scripts/load_document.js"></script>
+        <script src="scripts/load_autocomplete.js"></script>
+        <link rel="icon" href="cross.png">
     </head>
     <body>
         <div id="divSearch">
@@ -20,85 +23,19 @@
             <!--</form>-->
         </div>
         <div id="divMain">
-            <div id="divTitle"></div>
+            <div id="divTitleLeft"></div>
+            <div id="divTitleRight"></div>
+            <div><hr /></div>
             <div id="divContent"></div>
+            <div id="divFoot"></div>
         </div>
     </body>
     <script>
         $(document ).ready(function() {
-            $.getJSON("http://localhost:3002/api/categories", {
-                tags: "mount rainier",
-                tagmode: "any",
-                format: "json"
-            }).done((data)=>{
-                $("#ddlCategories").append("<option value=0 selected>All Songs</option>");
-                $.each(data, function(key, value) {
-                    $("#ddlCategories").append("<option value="+value.id+">" + value.name + "</option>");
-                });
-            });
-
-            $("#ddlCategories").focus();
-
-            //ALT + h
-            $(document).keydown(function(e) {
-                if(e.altKey && e.keyCode == 72)
-                    $("#divSearch").hide("slow");
-            });
-
-            //ALT + s
-            $(document).keydown(function(e) {
-                if(e.altKey && e.keyCode == 83)
-                    $("#divSearch").show("slow");
-            });
-
-            $("#ddlCategories").change(()=>{
-                let id = $("#ddlCategories").val();
-                $("#ddlCategories option[value="+id+"]").attr('selected', 'selected');
-            });
-
-            $( "#txtName").keypress((e)=>{
-                if (e.which == 13){
-                    $.ajax({
-                        url: "http://localhost:3002/api/song",
-                        type: 'post',
-                        dataType: 'JSON',
-                        data:{
-                            name: $('#txtName').val()
-                        },
-                        success: function( data ) {
-                            console.log("This is data from ajax",data);
-                            $("#divTitle").html(data.name);
-                            $("#divContent").html(data.content);
-                            $("#ddlCategories").focus();
-                            $('#txtName').val("");
-                            $("#divSearch").hide("slow");
-                        }
-                    });
-                }
-            });
+            LoadDocument();
         });
         $( function() {
-            $( "#txtName").autocomplete({
-                minLength: 2,
-                source: function( request, response ) {
-                    $.ajax({
-                        url: "http://localhost:3002/api/songs",
-                        type: 'post',
-                        dataType: 'JSON',
-                        data:{
-                            id: $('#ddlCategories option:selected').val(),
-                            term: $('#txtName').val()
-                        },
-                        success: function( data ) {
-                            response( data );
-                        }
-                    });
-                },
-                select: function (event, ui) {
-                    $('#txtName').val(ui.item.label); 
-                    return false;
-                }
-            });
+            LoadAutoComplete();
         });
     </script>
 </html>

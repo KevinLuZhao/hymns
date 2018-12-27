@@ -3,7 +3,7 @@ var con = db.connection;
 con.connect((err)=>{
     if (err) console.log(err);
 })
-con.query('SELECT * FROM hymns.category', (err, rows, fields)=>{
+con.query('SELECT * FROM hymns.category_list', (err, rows, fields)=>{
     con.end();
     //console.log(rows);
     exports.Categories = rows;

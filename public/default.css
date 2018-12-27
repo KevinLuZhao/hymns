@@ -24,11 +24,17 @@ div#divSearch{
     box-shadow: 0 1px 10px rgba(0, 0, 0, 0.3);
 }
 
-div#divTitle{
+div#divTitleLeft {
     padding: 15px 15px;
-    width:100%;
-    font-size: 3em;
-    text-align: center
+    float: left;
+    width: 70%
+  }
+
+div#divTitleRight {
+    padding: 15px 15px;
+    float: left;
+    width: 30%;
+    align-self: flex-end
 }
 
 div#divContent{
@@ -36,4 +42,17 @@ div#divContent{
     width:100%;
     font-size: 1.5em;
     text-align: center 
+}
+
+div#divFoot{
+    margin: 15px;
+    padding: 5px 0px;
+    width:100%;
+    font-size: 1em;
+    text-align: center 
+}
+
+hr{
+    border: 2px solid rgb(252, 206, 2);
+    border-radius: 5px;
 }
