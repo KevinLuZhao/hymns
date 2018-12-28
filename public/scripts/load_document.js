@@ -42,16 +42,21 @@ LoadDocument=function(){
                 },
                 success: function( data ) {
                     //$("#ddlCategories").focus();
-                    LoadTitle(data);
-                    LoadContent(data, 'Verse', 1)
+                    /*LoadTitle(data);
+                    LoadContent(data, 'Verse', 1)*/
                     $('#txtName').val("");
                     $("#divSearch").hide("slow");
 
+                    //var clsSongLoader = require(".\load_song.js");
+                    var songLoader = new SongLoader(data);
+                    songLoader.LoadTitle();
+                    songLoader.LoadContent(0);
+
                     $(document).keydown(function(e) {
                         if(e.keyCode == 33)
-                            LoadPrevPageContent(data);
+                            songLoader.LoadPrevPageContent();
                         if(e.keyCode == 34)
-                            LoadNextPageContent(data);
+                            songLoader.LoadNextPageContent();
                     });
                 }
             });
