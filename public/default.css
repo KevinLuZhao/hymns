@@ -25,23 +25,30 @@ div#divSearch{
 }
 
 div#divTitleLeft {
-    padding: 15px 15px;
+    font-size: 1.2em;
+    padding: 15px 30px 0px 30px;
     float: left;
-    width: 70%
+    width: 80%
   }
 
 div#divTitleRight {
-    padding: 15px 15px;
+    padding: 15px 30px 0px 0px;
     float: left;
-    width: 30%;
+    width: 20%;
     align-self: flex-end
 }
 
 div#divContent{
     padding: 5px 0px;
-    width:100%;
-    font-size: 1.5em;
-    text-align: center 
+    float: left;
+    width: 95%
+}
+
+div#divContentRight {
+    padding: 15px 15px;
+    float: left;
+    width: 5%;
+    align-self: flex-end
 }
 
 div#divFoot{
@@ -52,7 +59,30 @@ div#divFoot{
     text-align: center 
 }
 
-hr{
+div#divHr {
+    width: 98%;
+}
+
+hr.thick{
     border: 2px solid rgb(252, 206, 2);
     border-radius: 5px;
+}
+
+hr.thin{
+    border: 2px solid rgb(b,b,b);
+}
+
+.ChineseContent{
+    font-size: 1.5em;
+    text-align: center 
+}
+
+.EnglishContent{
+    font-size: 1.2em;
+    text-align: center 
+}
+
+.SongNo{
+    font-size: 1.5em;
+    color: rgb(252, 206, 2);
 }

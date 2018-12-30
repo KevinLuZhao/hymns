@@ -5,9 +5,10 @@
         <meta charset="utf-8">
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
-        <link rel="stylesheet" href="default.css">
+        
         <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <link rel="stylesheet" href="default.css">
         <script src="scripts/load_song.js"></script>
         <script src="scripts/load_document.js"></script>
         <script src="scripts/load_autocomplete.js"></script>
@@ -16,18 +17,18 @@
     <body>
         <div id="divSearch">
             <!--<form action="#" method="GET">-->
-                <label for="categories" >Category:</label>&nbsp; 
+                <label for="ddlCategories" >Category:</label>&nbsp; 
                 <select type="text" name="ddlCategory" id="ddlCategories"></select>  &nbsp;  &nbsp;                
-                <label for="title"></label>Song: </label>&nbsp; 
+                <label for="txtName"></label>Song Title: </label>&nbsp; 
                 <input type="text" name="txtName" id="txtName" size="80px">
             <!--</form>-->
         </div>
         <div id="divMain">
             <div id="divTitleLeft"></div>
             <div id="divTitleRight"></div>
-            <div><hr /></div>
+            <center><div id="divHr"></div></center>
             <div id="divContent"></div>
-            <div id="divFoot"></div>
+            <div id="divContentRight"></div>
         </div>
     </body>
     <script>

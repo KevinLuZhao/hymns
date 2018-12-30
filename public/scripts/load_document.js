@@ -1,4 +1,5 @@
 LoadDocument=function(){
+    let songLoader=null;
     $.getJSON("http://localhost:3002/api/categories", {
         tags: "mount rainier",
         tagmode: "any",
@@ -6,22 +7,29 @@ LoadDocument=function(){
     }).done((data)=>{
         $("#ddlCategories").append("<option value=0 selected>All Songs</option>");
         $.each(data, function(key, value) {
-            $("#ddlCategories").append("<option value="+value.id+">" + value.name + "</option>");
+            $("#ddlCategories").append("<option value="+value.id+">" + value.NameEN + "</option>");
         });
     });
 
-    $("#ddlCategories").focus();
+    $("#txtName").focus();
 
-    //ALT + h
     $(document).keydown(function(e) {
-        if(e.altKey && e.keyCode == 72)
+        //ALT + h
+        if(e.altKey && e.keyCode == 72){
             $("#divSearch").hide("slow");
-    });
-
-    //ALT + s
-    $(document).keydown(function(e) {
-        if(e.altKey && e.keyCode == 83)
+        }
+        //ALT + s
+        if(e.altKey && e.keyCode == 83){
             $("#divSearch").show("slow");
+            $("#txtName").focus();
+        }
+        //PageUp
+        if(e.keyCode == 33 && songLoader){
+            songLoader.LoadPrevPageContent();
+        }
+        //PageDown
+        if(e.keyCode == 34 && songLoader)
+            songLoader.LoadNextPageContent();
     });
 
     $("#ddlCategories").change(()=>{
@@ -41,23 +49,12 @@ LoadDocument=function(){
                     name: songCode
                 },
                 success: function( data ) {
-                    //$("#ddlCategories").focus();
-                    /*LoadTitle(data);
-                    LoadContent(data, 'Verse', 1)*/
+                    $("#txtName").focus();
                     $('#txtName').val("");
                     $("#divSearch").hide("slow");
-
-                    //var clsSongLoader = require(".\load_song.js");
-                    var songLoader = new SongLoader(data);
+                    songLoader = new SongLoader(data);
                     songLoader.LoadTitle();
-                    songLoader.LoadContent(0);
-
-                    $(document).keydown(function(e) {
-                        if(e.keyCode == 33)
-                            songLoader.LoadPrevPageContent();
-                        if(e.keyCode == 34)
-                            songLoader.LoadNextPageContent();
-                    });
+                    songLoader.LoadContent(0);                   
                 }
             });
         }

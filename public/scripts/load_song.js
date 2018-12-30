@@ -1,36 +1,37 @@
-/*currentChapterNo=1;
-currentRowsType='Verse';
-let CurrentSong;
-const maxPageRows=4;*/
-
 function SongLoader(song){
     SongContentPages = [];
     CurrentPageNo=0;
-    maxPageRows=4;
-
+    //maxPageRows=4;
     Song = song;
-    //Rows that will show in one page, usually one chapter, if the chapter's row is less than maxPageRows
     buildSongContentPages(song) ;
-    //}
 
     this.LoadTitle = function(){
-        $("#divTitleLeft").html('<div>'+song.TitleCN+'</div>'+'<div>'+song.TitleEN+'</div>');
-        $("#divTitleRight").html('<div>'+song.Category+'</div>'+'<div>'+song.SongCode+'</div>');
+        $("#divTitleLeft").html('<div>'+(song.TitleCN==null?'':song.TitleCN)+'</div>'+'<div>'+(song.TitleEN==null?'':song.TitleEN)+'</div>');
+        $("#divTitleRight").html('<div>'+song.Category+'</div>'+'<div class="SongNo">'+song.SongCode.substring(1)+'</div>');
+        $("#divHr").html('<hr class="thick"/>');
     }
 
     this.LoadContent = function(pageNo){
-        let content="";
+        let content="<center><table>";
         page = SongContentPages.find(o=>o.PageNo==pageNo);
         page.Rows.forEach((row) => {
             if (row.Content_CN){
-                content+='<div>'+row.Content_CN+'</div>'
+                content+='<tr><td class="ChineseContent">'+row.Content_CN+'</td></tr>'
             }
             if (row.Content_EN){
-                content+='<div>'+row.Content_EN+'</div>'
+                content+='<tr><td class="EnglishContent">'+row.Content_EN+'</td></tr>'
+            }
+            if (row==page.Rows[page.Rows.length-1]){
+                content+='<tr><td><hr class="thick"></td></tr>'
+            }
+            else{
+                content+='<tr><td><hr class="thin"></td></tr>'
             }
         });
+        content+='</table></center>'
         $("#divContent").html(content);
-        $("#divFoot").html(page.ChapterNo);
+        let maxChapterNo = Math.max.apply(Math, song.Content.map(o=>o.ChapterNo));
+        $("#divContentRight").html('<p class="SongNo">'+page.ChapterNo+"/"+maxChapterNo+"</p>");
         CurrentPageNo=pageNo;
     }
 
@@ -60,7 +61,7 @@ function SongLoader(song){
         let arrRowGroups=[];
         chapters.forEach((chapter)=>{
             arrRowGroups=arrRowGroups.concat(splitRowsToPageSizeGroup(chapter.VerseRows, chapter.ChapterNo));
-            if (chapter.ChorusRows){
+            if (chapter.ChorusRows&&chapter.ChorusRows.length>0){
                 arrRowGroups=arrRowGroups.concat(splitRowsToPageSizeGroup(chapter.ChorusRows, chapter.ChapterNo));
             }
         });
@@ -78,6 +79,9 @@ function SongLoader(song){
     function splitRowsToPageSizeGroup(rows, chapterNo){
         let arrRowGroups=[];
         let arrRows=[];
+        maxPageRows=4;
+        if((rows[0].Content_CN==null)||(rows[0].Content_EN==null))
+            maxPageRows=6;
         rowCounter=0;
         rows.forEach((row)=>{
             arrRows[rowCounter]=row;
@@ -105,78 +109,3 @@ function SongLoader(song){
 }
 
 exports=SongLoader;
-
-/*LoadTitle = function(song){
-    $("#divTitleLeft").html('<div>'+song.TitleCN+'</div>'+'<div>'+song.TitleEN+'</div>');
-    $("#divTitleRight").html('<div>'+song.Category+'</div>'+'<div>'+song.SongCode+'</div>');
-}
-
-LoadNextPageContent=function(song){
-    let currentChapter=song.Content.find(o=>o.ChapterNo==currentChapterNo);
-    if (currentRowsType=='Verse' && currentChapter.ChorusRows){
-        LoadContent(song, 'Chorus', currentChapterNo);
-    }
-    else{
-        LoadContent(song, 'Verse', getNextChapterNo(song));
-    }
-}
-
-LoadPrevPageContent=function(song){
-    let currentChapter=song.Content.find(o=>o.ChapterNo==currentChapterNo);
-    if (currentRowsType=='Chorus'){
-        LoadContent(song, 'Verse', currentChapterNo);
-    }
-    else{
-        if (currentChapter.ChorusRows){
-            LoadContent(song, 'Chorus', getPrevChapterNo(song));
-        }
-        else{
-            LoadContent(song, 'Verse', getPrevChapterNo(song));
-        }
-    }
-}
-
-LoadContent = function(song, rowsType, chapterNo){
-    let chapter = song.Content.find(o=>o.ChapterNo==chapterNo);
-    let rows;
-    if (rowsType=='Verse'){
-        rows=chapter.VerseRows;
-    }
-    else{
-        rows=chapter.ChorusRows;
-    }
-    let content='';
-    rows.sort((a,b)=>a.RowNo>b.RowNo);
-    rows.forEach(row => {
-        if (row.Content_CN){
-            content+='<div>'+row.Content_CN+'</div>'
-        }
-        if (row.Content_EN){
-            content+='<div>'+row.Content_EN+'</div>'
-        }
-    });
-    $("#divContent").html(content);
-    $("#divFoot").html(chapter.ChapterNo);
-    currentChapterNo=chapterNo;
-    currentRowsType=rowsType;
-}
-
-function getNextChapterNo(song){
-    let maxNo = Math.max.apply(Math, song.Content.map(o=>o.ChapterNo));
-    if (currentChapterNo<maxNo){
-        return currentChapterNo+1;
-    }
-    else{
-        return 1;
-    }
-}
-
-function getPrevChapterNo(song){
-    let maxNo = Math.max.apply(Math, song.Content.map(o=>o.ChapterNo));
-    if (currentChapterNo>1){
-        return currentChapterNo-1;
-    }
-    else{
-        return maxNo;
-    }
-}*/

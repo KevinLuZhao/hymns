@@ -6,10 +6,10 @@ const SearchSongs = function(id, term){
         const con = mySql.createConnection(db.connection_settings);
         let query;
         if (id>0){
-            query = `SELECT CONCAT(song_code, ':', TitleCN, ' ', TitleEN) name FROM hymns.song_list WHERE category_id=${id} AND (song_code LIKE '%${term}%' OR TitleCN LIKE '%${term}%' OR TitleEN LIKE '%${term}%')`;
+            query = `SELECT CONCAT(song_code, ':', (CASE WHEN TitleCN IS NULL THEN '' ELSE TitleCN END), (CASE WHEN TitleEN IS NULL THEN '' ELSE concat(' ',TitleEN) END)) name FROM hymns.song_list WHERE category_id=${id} AND (song_code LIKE '%${term}%' OR TitleCN LIKE '%${term}%' OR TitleEN LIKE '%${term}%')`;
         }
         else{
-            query = `SELECT CONCAT(song_code, ':', TitleCN, ' ', TitleEN) name FROM hymns.song_list WHERE song_code LIKE '%${term}%' OR TitleCN LIKE '%${term}%' OR TitleEN LIKE '%${term}%'`;
+            query = `SELECT CONCAT(song_code, ':', (CASE WHEN TitleCN IS NULL THEN '' ELSE TitleCN END), (CASE WHEN TitleEN IS NULL THEN '' ELSE concat(' ',TitleEN) END)) name FROM hymns.song_list WHERE song_code LIKE '%${term}%' OR TitleCN LIKE '%${term}%' OR TitleEN LIKE '%${term}%'`;
         }
         let ret;
         con.query(query, (err, rows, fields)=>{
@@ -53,7 +53,7 @@ const GetSong = function(songCode){
         try{
             var promiseSong = new Promise(function (resolve, reject) {
                 const con = mySql.createConnection(db.connection_settings);
-                let query = `SELECT *, c.name category FROM hymns.song_list s INNER JOIN hymns.category_list c ON s.category_id=c.id WHERE song_code = '${songCode}'`;
+                let query = `SELECT *, CONCAT(c.NameCN, ' ', c.NameEN) category FROM hymns.song_list s INNER JOIN hymns.category_list c ON s.category_id=c.id WHERE song_code = '${songCode}'`;
                 let ret;
                 con.query(query, (err, rows, fields)=>{
                     if (err) {
@@ -91,7 +91,6 @@ const GetSong = function(songCode){
                     });
                 });
                 promiseSongContents.then((rows)=>{
-                    //console.log("Content:", rows);
                     let currentChapter = 0;
                     var arrChapterNum = rows.map(o=>o.chapter).unique();
                     arrChapterNum.forEach((chapterNo)=>{
@@ -121,11 +120,9 @@ const GetSong = function(songCode){
                             chapter.ChorusRows.push(contentRow);
                         });
         
-                        //console.log(chapter);
                         song.Content.push(chapter);
                     })
                     
-                    //console.log("song is:", song);
                     resolve(song);          
                 });
             });
@@ -142,7 +139,6 @@ const GetSong = function(songCode){
     });
 }
 
-//GetSong('H325');
 exports.GetSongList=SearchSongs;
 exports.GetSongByName=GetSongByName;
 exports.GetSong=GetSong;

@@ -25,12 +25,10 @@ class RouterManager{
         
         router.route('/song')
             .post(function(req,res){
-                console.log("received fom ajax post: ", req.body);
-                //ret=songs.GetSong(req.body.name);
-                //console.log ("return:", ret);
+                //console.log("received fom ajax post: ", req.body);
                 songs.GetSong(req.body.name)
                     .then(result=>{
-                        console.log("return:", result);
+                        //console.log("return:", result);
                         res.send(result);
                     });
         });
