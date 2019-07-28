@@ -1,5 +1,6 @@
 LoadDocument=function(){
     let songLoader=null;
+    $("#divAdvancedSearch").hide();
     $.getJSON("http://localhost:3002/api/categories", {
         tags: "mount rainier",
         tagmode: "any",
@@ -12,11 +13,48 @@ LoadDocument=function(){
     });
 
     $("#txtName").focus();
+    $("#divSongList").hide();
+
+    $.ajax({
+        url: "http://localhost:3002/api/songs",
+        type: 'post',
+        dataType: 'JSON',
+        data:{
+            id: $('#ddlCategories option:selected').val(),
+            term: null
+        },
+        success: function( data ) {
+            SongListLoader(data);
+        }
+    });
+
+
 
     $(document).keydown(function(e) {
         //ALT + h
+        if(e.altKey && e.keyCode == 49){
+            $("#divMain").show();
+            $("#divSongList").hide();
+        }
+        //ALT + h
+        if(e.altKey && e.keyCode == 50){
+            $("#divMain").hide();
+            $("#divSongList").show();
+        }
+        //ALT + h
         if(e.altKey && e.keyCode == 72){
             $("#divSearch").hide("slow");
+        }
+        //ALT + A
+        if(e.altKey && e.keyCode == 65){
+            $("#divAdvancedSearch").toggle();
+            if ($("#divAdvancedSearch").is(":visible")){
+                $("#divMain").hide();
+                $("#txtTerm").focus();
+            }
+            else{
+                $("#divMain").show();
+            }
         }
         //ALT + s
         if(e.altKey && e.keyCode == 83){
@@ -57,6 +95,12 @@ LoadDocument=function(){
                     songLoader.LoadContent(0);                   
                 }
             });
+        }
+    });
+
+    $( "#txtAdvancedSearchTerm").keypress((e)=>{
+        if (e.which == 13){
+            AdvancedSearchLoader($( "#txtAdvancedSearchTerm").val());
         }
     });
 }

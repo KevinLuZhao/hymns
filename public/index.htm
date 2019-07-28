@@ -10,8 +10,10 @@
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         <link rel="stylesheet" href="default.css">
         <script src="scripts/load_song.js"></script>
+        <script src="scripts/load_songlist.js"></script>
         <script src="scripts/load_document.js"></script>
         <script src="scripts/load_autocomplete.js"></script>
+        <script src="scripts/load_advancedsearch.js"></script>
         <link rel="icon" href="cross.png">
     </head>
     <body>
@@ -29,6 +31,15 @@
             <center><div id="divHr"></div></center>
             <div id="divContent"></div>
             <div id="divContentRight"></div>
+        </div>
+        <div id="divSongList">
+            <center><div id="divSongListContent"></div></center>
+        </div>
+        <div id="divAdvancedSearch">
+            <p class="h2">Advanced Search</p>
+            <label for="txtName"></label>Key Words: </label>&nbsp; 
+            <input type="text" name="txtAdvancedSearchTerm" id="txtAdvancedSearchTerm" size="80px">
+            <div id="divAdvancedSearchResult"></div>
         </div>
     </body>
     <script>

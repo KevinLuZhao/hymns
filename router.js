@@ -25,13 +25,19 @@ class RouterManager{
         
         router.route('/song')
             .post(function(req,res){
-                //console.log("received fom ajax post: ", req.body);
                 songs.GetSong(req.body.name)
                     .then(result=>{
-                        //console.log("return:", result);
                         res.send(result);
                     });
         });
+
+        router.route('/advancedsearch')
+            .post(function(req,res){
+                songs.GetAdvancedSearchResult(req.body.term)
+                    .then(result=>{
+                        res.send(result);
+                    });
+            });
 
         return router;
     }

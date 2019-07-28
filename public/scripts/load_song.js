@@ -15,11 +15,11 @@ function SongLoader(song){
         let content="<center><table>";
         page = SongContentPages.find(o=>o.PageNo==pageNo);
         page.Rows.forEach((row) => {
-            if (row.Content_CN){
-                content+='<tr><td class="ChineseContent">'+row.Content_CN+'</td></tr>'
+            if (row.ContentCN){
+                content+='<tr><td class="ChineseContent">'+row.ContentCN+'</td></tr>'
             }
-            if (row.Content_EN){
-                content+='<tr><td class="EnglishContent">'+row.Content_EN+'</td></tr>'
+            if (row.ContentEN){
+                content+='<tr><td class="EnglishContent">'+row.ContentEN+'</td></tr>'
             }
             if (row==page.Rows[page.Rows.length-1]){
                 content+='<tr><td><hr class="thick"></td></tr>'
@@ -80,7 +80,7 @@ function SongLoader(song){
         let arrRowGroups=[];
         let arrRows=[];
         maxPageRows=4;
-        if((rows[0].Content_CN==null)||(rows[0].Content_EN==null))
+        if((rows[0].ContentCN==null)||(rows[0].ContentEN==null))
             maxPageRows=6;
         rowCounter=0;
         rows.forEach((row)=>{
